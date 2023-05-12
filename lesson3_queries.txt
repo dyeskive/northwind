@@ -1,0 +1,42 @@
+-- -- Show all info about CompanyName and Address from the Customers table.
+-- SELECT company_name, address 
+-- FROM customers;
+
+-- -- Show all info about CompanyName and ContactPerson from the Suppliers table.
+-- SELECT company_name, contact_name
+-- FROM suppliers;
+
+-- -- Show all info about ProductName and UnitPrice from the Products table.
+-- SELECT product_name, unit_price
+-- FROM products;
+
+-- -- Show all info about LastName, FirstName, BirthDate and HireDate of Employees
+-- SELECT last_name, first_name, birth_date, hire_date
+-- FROM employees;
+
+-- -- Show all info about the employee with ID 8
+-- SELECT *
+-- FROM employees as e
+-- WHERE employee_id = 8;
+
+-- -- Show the list of first and last names of the employees from London.
+-- SELECT first_name, last_name
+-- FROM employees as e
+-- WHERE city = 'London';
+
+-- -- Show the list of first, last names and ages of the employees whose age is greater than 65.
+-- SELECT e.first_name, e.last_name, e.birth_date
+-- FROM employees as e
+-- WHERE EXTRACT(YEAR FROM AGE(CURRENT_DATE, e.birth_date)) > 65;
+
+-- -- Show the list of products with the price between 10 and 50.
+-- SELECT *
+-- FROM products as p
+-- WHERE p.unit_price BETWEEN 10 AND 50;
+
+-- -- Show cities where there are more than 1 employee;
+-- SELECT e.city, COUNT(e.city)
+-- FROM employees as e 
+-- GROUP BY e.city
+-- HAVING COUNT(e.city) > 1
+-- ORDER BY COUNT(e.city) ASC;
