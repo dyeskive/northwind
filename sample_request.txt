@@ -1,0 +1,6 @@
+SELECT [DISTINCT | ALL] {<column1>, <column2>, ... | * }
+FROM <table_name>
+[WHERE <search_condition>]
+[GROUP BY <group_item1>[, <group_item2>, …]]
+[HAVING <search_condition>]
+[ORDER BY <sort_item1>[, <sort_item2>,…]];
