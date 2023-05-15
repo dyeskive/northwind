@@ -40,3 +40,19 @@
 -- GROUP BY e.city
 -- HAVING COUNT(e.city) > 1
 -- ORDER BY COUNT(e.city) ASC;
+
+-- -- Show the list of products which names start form ‘N’ and price is greater than 20.
+-- SELECT product_name, unit_price
+-- FROM products
+-- WHERE unit_price > 20 AND product_name LIKE 'N%'
+
+-- -- Show the total number of employees which live in the same city.
+-- SELECT city, count(employee_id)
+-- FROM employees
+-- GROUP BY city
+-- ORDER BY count(employee_id) DESC
+
+-- -- Calculate the count of customers from Mexico and contact signed as ‘Owner’.
+-- SELECT count(c.customer_id)
+-- from customers as c
+-- WHERE c.country = 'Mexico' and contact_title = 'Owner'
