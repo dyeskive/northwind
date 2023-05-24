@@ -216,3 +216,52 @@
 -- FROM suppliers as s
 --     LEFT JOIN products as p
 --         ON s.supplier_id = p.supplier_id
+
+
+-- -- Show, for each product, the associated Supplier from Germany and Spain. 
+-- -- Show the ProductID, ProductName, and the CompanyName of the Supplier. Sort by ProductID.
+-- SELECT 
+--     p.product_id
+--     ,p.product_name
+--     ,s.company_name
+-- FROM products as p
+--     JOIN suppliers as s
+--         ON p.supplier_id = s.supplier_id
+--         AND s.country IN ('Germany', 'Spain')
+-- ORDER BY
+--     p.product_id
+
+
+-- --We’d like to show a list of the Orders that were made, including the Shipper that was used. Show the OrderID, OrderDate (date only with alias ShortDate), and CompanyName of the Shipper, and sort by OrderID. Show only those rows with an OrderID of less than 10260.
+-- SELECT
+--     o.order_id
+--     ,o.order_date as short_date
+--     ,s.company_name
+-- FROM orders as o
+--     JOIN shippers as s
+--         ON o.ship_via = s.shipper_id
+--         AND o.order_id < 10260
+-- ORDER BY
+--     o.order_id
+
+
+-- -- We're doing inventory, and need to show information about OrderID, a list of products, and their quantity for orders which were shipped by Leverling Janet with quantities greater than 50.
+-- -- The result should be sorted by Quantity.
+-- SELECT
+--     o.order_id
+--     ,p.product_name
+--     ,od.quantity
+-- FROM
+--     orders as o
+-- JOIN 
+--     order_details as od ON o.order_id = od.order_id
+-- JOIN 
+--     products as p ON od.product_id = p.product_id
+-- JOIN 
+--     employees as e ON o.employee_id = e.employee_id
+-- WHERE
+--     od.quantity > 50 
+--     AND TRIM(e.first_name) = 'Janet' 
+--     AND TRIM(e.last_name) = 'Leverling'
+-- ORDER BY
+--     od.quantity
