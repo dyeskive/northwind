@@ -265,3 +265,70 @@
 --     AND TRIM(e.last_name) = 'Leverling'
 -- ORDER BY
 --     od.quantity
+
+
+-- -- There are some customers who have never actually placed an order. Show these customers.
+-- SELECT
+--     c.company_name
+-- FROM
+--     customers as c
+--     LEFT JOIN orders as o 
+--     ON c.customer_id = o.customer_id
+-- WHERE
+--     o.order_id IS NULL
+
+
+-- -- One employee (Margaret Peacock, EmployeeID 4) has placed the most orders. However, there are some customers who've never placed an order with her. Show only those customers who have never placed an order with her.
+-- SELECT
+--     c.company_name
+-- FROM
+--     customers as c
+--     LEFT JOIN orders as o
+--     ON c.customer_id = o.customer_id
+--     AND o.employee_id = 4
+-- WHERE
+--     o.customer_id IS NULL
+
+-- SELECT
+--     c.customer_id
+--     ,c.company_name
+--     ,o.order_id
+--     ,od.quantity * od.unit_price as TotalOrderAmount
+--     ,od.discount
+-- FROM
+--     customers as c
+--     LEFT JOIN orders as o
+--         ON c.customer_id = o.customer_id
+--         AND EXTRACT(YEAR FROM o.order_date) = 1997
+--     LEFT JOIN order_details as od
+--         ON o.order_id = od.order_id
+-- WHERE
+--     o.order_id IS NOT NULL
+--     AND od.quantity * od.unit_price >= 10000
+
+
+-- --Show the 10 orders with the most line items, in order of total line items.
+-- SELECT 
+--     od.order_id
+--     ,count(od.order_id) as TotalOrderLines
+-- FROM order_details as od
+-- GROUP BY
+--     od.order_id
+-- ORDER BY
+--     TotalOrderLines DESC
+-- LIMIT 10
+
+-- --Which salespeople have the most orders arriving late?
+-- SELECT
+--     o.employee_id
+--     ,e.last_name
+--     ,count(o.order_id) as TotalLateOrders
+-- FROM orders as o
+--     JOIN employees as e
+--         ON o.employee_id = e.employee_id
+--         AND o.shipped_date > o.required_date
+-- GROUP BY
+--     o.employee_id
+--     ,e.last_name
+-- ORDER BY
+--     TotalLateOrders DESC
