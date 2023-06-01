@@ -332,3 +332,188 @@
 --     ,e.last_name
 -- ORDER BY
 --     TotalLateOrders DESC
+
+
+-- -- Create a report that shows the CompanyName and total number of orders by the customer since December 31, 2015. 
+-- -- Show the number of Orders greater than 10. Use alias NumberofOrders for the calculated column
+-- SELECT
+--     c.company_name
+--     ,count(o.order_id) as NumberofOrders
+-- FROM
+--     customers as c
+--     JOIN orders as o
+--         ON c.customer_id = o.customer_id
+--         AND o.order_date > '1997-01-01'
+-- GROUP BY
+--     c.company_name
+-- HAVING
+--     count(o.order_id) > 10
+
+-- -- Create a report that shows the EmployeeID, the LastName and FirstName as Employee (alias), and the LastName and FirstName of who they report to as Manager (alias)
+-- SELECT
+--     e1.employee_id
+--     ,e1.first_name || ' ' || e1.last_name as Employee
+--     ,e2.first_name || ' ' || e2.last_name as Manager
+-- FROM
+--     employees as e1
+--     LEFT JOIN employees as e2
+--         ON e1.reports_to = e2.employee_id
+
+-- -- Create a report that shows the  ContactName of customer, TotalSum (alias for the calculated column UnitPrice*Quantity*(1-Discount)) from the Order Details, and Customers table with the discount given on every purchase. Show only VIP customers with TotalSum greater than 10000. Round the TotalSum to 2 decimal places.
+-- SELECT
+--     c.contact_name,
+--     round(sum(od.quantity * od.unit_price * (1-od.discount)) * 100) / 100 as TotalSum
+-- FROM
+--     customers as c
+-- JOIN orders as o
+--     ON c.customer_id = o.customer_id
+-- JOIN order_details as od
+--     ON o.order_id = od.order_id
+-- GROUP BY
+--     c.contact_name
+-- HAVING
+--     sum(od.quantity * od.unit_price * (1-od.discount)) > 10000
+
+
+-- -- Create a report that shows the total quantity of products (alias TotalUnits)
+-- -- ordered. Only show records for products for which the quantity ordered is fewer than 200. 
+-- SELECT
+--     p.product_name
+--     ,sum(od.quantity) as TotalUnits
+-- FROM
+--     products as p
+--     JOIN order_details as od
+--         ON p.product_id = od.product_id
+-- GROUP BY
+--     p.product_name
+-- HAVING
+--     sum(od.quantity) < 200
+
+-- SELECT
+--     c.company_name
+--     ,count(o.order_id) as NumOrders
+-- FROM
+--     customers as c
+--     JOIN orders as o
+--         ON c.customer_id = o.customer_id
+--         AND o.order_date > '1997-01-01'
+-- GROUP BY
+--     c.company_name
+-- HAVING
+--     count(o.order_id) > 5
+-- ORDER BY
+--     NumOrders DESC
+
+
+-- SELECT
+--     c.company_name
+--     ,o.order_id
+--     ,sum(od.quantity * od.unit_price) as TotalPrice
+-- FROM
+--     customers as c
+--     JOIN orders as o
+--         ON c.customer_id = o.customer_id
+--     JOIN order_details as od
+--         ON o.order_id = od.order_id
+-- GROUP BY
+--     c.company_name
+--     ,o.order_id
+-- HAVING
+--     sum(od.quantity * od.unit_price) > 10000
+-- ORDER BY
+--     TotalPrice DESC
+
+
+-- SELECT
+--     count(e.employee_id) as NumEmployees
+--     ,count(c.customer_id) as NumCustomers
+--     ,e.city
+-- FROM
+--     employees as e
+--     JOIN customers as c
+--         ON e.city = c.city
+-- GROUP BY
+--     e.city
+
+-- --Create a report that shows the number of employees (alias numEmployees) and number of customers (alias numCompanies) from each city that has employees in it.
+-- SELECT
+--     e.city
+--     ,count(DISTINCT e.employee_id) as NumEmployees
+--     ,count(DISTINCT c.customer_id) as NumCustomers
+-- FROM
+--     employees as e
+--     JOIN customers as c
+--         ON e.city = c.city
+-- GROUP BY
+--     e.city
+
+
+-- --Get the lastname and firstname of employee (alias Name), company names and phone numbers (alias Phone) of all employees, customers, and suppliers, who are situated in London.
+-- --Add the column (alias Type) to the result set which should specify what type of counterparty (employee, customer, or supplier) it is.
+-- SELECT
+--     e.last_name || ' ' || e.first_name as Name
+--     ,e.home_phone as phone
+--     ,'employee' as Type
+-- FROM
+--     employees as e
+-- WHERE
+--     e.city = 'London'
+-- UNION
+-- SELECT
+--     c.company_name
+--     ,c.phone
+--     ,'customer' as Type
+-- FROM
+--     customers as c
+-- WHERE
+--     c.city = 'London'
+-- UNION
+-- SELECT
+--     s.company_name
+--     ,s.phone
+--     ,'supplier' as Type
+-- FROM
+--     suppliers as s
+-- WHERE
+--     s.city = 'London'
+-- ORDER BY type
+
+-- -- Write the query which would show the list of employees (FirstName and LastName) and their total sales (alias TotalSales) who have sold more than 200 positions of products.
+-- SELECT
+--     e.first_name
+--     ,e.last_name
+--     --,count(od.product_id)
+--     ,sum(od.quantity * od.unit_price * (1-od.discount)) as TotalSales
+-- FROM
+--     employees as e
+--     JOIN orders as o
+--         ON e.employee_id = o.employee_id
+--     JOIN order_details as od
+--         ON o.order_id = od.order_id
+-- GROUP BY
+--     e.first_name
+--     ,e.last_name
+-- HAVING
+--     count(od.product_id)>200
+
+
+--Write the query which would show the names of employees who sell the products of more than 25 suppliers during the 2016 year.
+SELECT
+    e.first_name
+    ,e.last_name
+    ,count(DISTINCT p.supplier_id) as NumSuppliers
+FROM
+    employees as e
+    JOIN orders as o
+        ON e.employee_id = o.employee_id
+    JOIN order_details as od
+        ON o.order_id = od.order_id
+    JOIN products as p
+        ON od.product_id = p.product_id
+-- WHERE
+--     o.order_date BETWEEN '2016-01-01' AND '2016-12-31'
+GROUP BY
+    e.first_name
+    ,e.last_name
+HAVING
+    count(DISTINCT p.supplier_id) > 25
