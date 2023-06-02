@@ -545,9 +545,32 @@
 --     p.unit_price > (SELECT AVG(p.unit_price) FROM products AS p)
 
 
+-- SELECT
+--     c.company_name
+-- FROM customers c
+-- JOIN orders o ON c.customer_id = o.customer_id
+--     AND c.country = 'Germany'
+-- WHERE EXTRACT(YEAR FROM order_date) = '2016'
+
+
 SELECT
-    c.company_name
-FROM customers c
-JOIN orders o ON c.customer_id = o.customer_id
-    AND c.country = 'Germany'
-WHERE EXTRACT(YEAR FROM order_date) = '2016'
+    o.shipped_date
+    ,count(DISTINCT o.order_id) as NumberOfOrders
+    ,sum(od.Total) as Total
+FROM
+    orders as o
+    JOIN (
+        SELECT
+            od.order_id
+            ,round(od.unit_price*od.quantity*(1-od.discount)*100)/100 as Total
+        FROM
+            order_details as od
+    ) as od
+        ON o.order_id = od.order_id
+WHERE o.shipped_date BETWEEN '1997-01-01' AND '1997-03-31'
+GROUP BY
+    o.shipped_date
+HAVING
+    count(DISTINCT o.order_id) > 3
+    
+
