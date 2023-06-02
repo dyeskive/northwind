@@ -497,23 +497,57 @@
 --     count(od.product_id)>200
 
 
---Write the query which would show the names of employees who sell the products of more than 25 suppliers during the 2016 year.
-SELECT
-    e.first_name
-    ,e.last_name
-    ,count(DISTINCT p.supplier_id) as NumSuppliers
-FROM
-    employees as e
-    JOIN orders as o
-        ON e.employee_id = o.employee_id
-    JOIN order_details as od
-        ON o.order_id = od.order_id
-    JOIN products as p
-        ON od.product_id = p.product_id
+-- --Write the query which would show the names of employees who sell the products of more than 25 suppliers during the 2016 year.
+-- SELECT
+--     e.first_name
+--     ,e.last_name
+--     ,count(DISTINCT p.supplier_id) as NumSuppliers
+-- FROM
+--     employees as e
+--     JOIN orders as o
+--         ON e.employee_id = o.employee_id
+--     JOIN order_details as od
+--         ON o.order_id = od.order_id
+--     JOIN products as p
+--         ON od.product_id = p.product_id
+-- -- WHERE
+-- --     o.order_date BETWEEN '2016-01-01' AND '2016-12-31'
+-- GROUP BY
+--     e.first_name
+--     ,e.last_name
+-- HAVING
+--     count(DISTINCT p.supplier_id) > 25
+
+-- SELECT od1.order_id
+-- FROM order_details AS od1
+-- JOIN order_details AS od2 ON od1.Order_ID = od2.Order_ID
+-- JOIN orders AS o ON od1.Order_ID = o.Order_ID
+-- WHERE o.employee_id = (SELECT employee_id FROM employees WHERE last_name = 'Leverling')
+--     AND od1.Product_ID != od2.Product_ID 
+--     AND od1.Quantity = od2.Quantity
+--     --AND od1.Quantity >= 60
+-- GROUP BY od1.Order_ID
+
+
+-- -- We know that Andrew Fuller is the Vice President of Northwind Company. Create the report that shows the list of those employees (last and first name) who were hired earlier than Fuller.
+-- SELECT e.last_name, e.first_name, e.hire_date
+-- FROM employees AS e
+-- WHERE e.hire_date < (SELECT hire_date FROM employees WHERE last_name = 'Fuller')
+
+
+-- -- Write the query which should create the list of products and their unit price for products with price greater than average products' unit price
+-- SELECT
+--     p.product_name
+--     ,p.unit_price
+-- FROM
+--     products as p
 -- WHERE
---     o.order_date BETWEEN '2016-01-01' AND '2016-12-31'
-GROUP BY
-    e.first_name
-    ,e.last_name
-HAVING
-    count(DISTINCT p.supplier_id) > 25
+--     p.unit_price > (SELECT AVG(p.unit_price) FROM products AS p)
+
+
+SELECT
+    c.company_name
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+    AND c.country = 'Germany'
+WHERE EXTRACT(YEAR FROM order_date) = '2016'
